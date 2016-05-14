@@ -1,60 +1,83 @@
 (function($) {
-$(document).ready(function(){
-    b = $('.block');
-    for(i=0; i<b.length; i++) {
-        w = $(b[i]).width();
-        w = $(b[i]).height(w);
-        c = $(b[i]).children();
-        $(c[0]).attr('id', 'block'+i);
-        k = $(c[0]);
-        k.click(function(){l = prompt(); $(this).text(l);});
-    }
-  // putting lines by the pre blocks
-  $("pre").each(function(){
-    var pre = $(this).text().split("\n");
-    var lines = new Array(pre.length+1);
-    for(var i = 0; i < pre.length; i++) {
-      var wrap = Math.floor(pre[i].split("").length / 70)
-      if (pre[i]==""&&i==pre.length-1) {
-        lines.splice(i, 1);
-      } else {
-        lines[i] = i+1;
-        for(var j = 0; j < wrap; j++) {
-          lines[i] += "\n";
+    $(document).ready(function(){
+        b = $('.block');
+        for(i=0; i<b.length; i++) {
+            w = $(b[i]).width();
+            w = $(b[i]).height(w);
+            c = $(b[i]).children();
+            $(c[0]).attr('id', 'block'+i);
+            k = $(c[0]);
+            k.click(function(){l = prompt(); $(this).text(l);});
         }
-      }
-    }
-    $(this).before("<pre class='lines'>" + lines.join("\n") + "</pre>");
-  });
+        solve = function() {
+            b = $('.block');
+            str = "";
+            for(i = 0; i < b.length; i++) {
+                w = $(b[i]).width();
+                w = $(b[i]).height(w);
+                c = $(b[i]).children();
+                $(c[0]).attr('id', 'block'+i);
+                k = $(c[0]);
+                str += k.text() || "0";
+            }
+            ptr = allocate(intArrayFromString(str), 'i8', ALLOC_NORMAL);
+            _solve(ptr);
+            out = Pointer_stringify(ptr);
+            for(i=0; i<out.length; i++){
+                $('#block'+i).text(out[i]);
+            }
+        }
+        clear_blocks = function() {
+            for(i=0; i<729; i++){
+                $('#block'+i).text("");
+            }
+        }
+        // putting lines by the pre blocks
+        $("pre").each(function(){
+            var pre = $(this).text().split("\n");
+            var lines = new Array(pre.length+1);
+            for(var i = 0; i < pre.length; i++) {
+                var wrap = Math.floor(pre[i].split("").length / 70)
+                    if (pre[i]==""&&i==pre.length-1) {
+                        lines.splice(i, 1);
+                    } else {
+                        lines[i] = i+1;
+                        for(var j = 0; j < wrap; j++) {
+                            lines[i] += "\n";
+                        }
+                    }
+            }
+            $(this).before("<pre class='lines'>" + lines.join("\n") + "</pre>");
+        });
 
-  var headings = [];
+        var headings = [];
 
-  var collectHeaders = function(){
-    headings.push({"top":$(this).offset().top - 15,"text":$(this).text()});
-  }
+        var collectHeaders = function(){
+            headings.push({"top":$(this).offset().top - 15,"text":$(this).text()});
+        }
 
-  if($(".markdown-body h1").length > 1) $(".markdown-body h1").each(collectHeaders)
-  else if($(".markdown-body h2").length > 1) $(".markdown-body h2").each(collectHeaders)
-  else if($(".markdown-body h3").length > 1) $(".markdown-body h3").each(collectHeaders)
+        if($(".markdown-body h1").length > 1) $(".markdown-body h1").each(collectHeaders)
+        else if($(".markdown-body h2").length > 1) $(".markdown-body h2").each(collectHeaders)
+        else if($(".markdown-body h3").length > 1) $(".markdown-body h3").each(collectHeaders)
 
-  $(window).scroll(function(){
-    if(headings.length==0) return true;
-    var scrolltop = $(window).scrollTop() || 0;
-    if(headings[0] && scrolltop < headings[0].top) {
-      $(".current-section").css({"opacity":0,"visibility":"hidden"});
-      return false;
-    }
-    $(".current-section").css({"opacity":1,"visibility":"visible"});
-    for(var i in headings) {
-      if(scrolltop >= headings[i].top) {
-        $(".current-section .name").text(headings[i].text);
-      }
-    }
-  });
+            $(window).scroll(function(){
+                if(headings.length==0) return true;
+                var scrolltop = $(window).scrollTop() || 0;
+                if(headings[0] && scrolltop < headings[0].top) {
+                    $(".current-section").css({"opacity":0,"visibility":"hidden"});
+                    return false;
+                }
+                $(".current-section").css({"opacity":1,"visibility":"visible"});
+                for(var i in headings) {
+                    if(scrolltop >= headings[i].top) {
+                        $(".current-section .name").text(headings[i].text);
+                    }
+                }
+            });
 
-  $(".current-section a").click(function(){
-    $(window).scrollTop(0);
-    return false;
-  })
-});
+        $(".current-section a").click(function(){
+            $(window).scrollTop(0);
+            return false;
+        })
+    });
 })(jQuery)
