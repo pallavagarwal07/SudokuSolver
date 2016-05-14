@@ -1,0 +1,6 @@
+{
+  "name": "Sudoku Solver",
+  "tagline": "Solving SUDOKUs using boolean satisfiability.",
+  "body": "# Sudoku Solver\r\n\r\nRecently, I have been having fun using SAT solvers for a variety of tasks. This time I\r\nthought I would model sudoku problems as a boolean satisfiability problem. I'm surprised\r\nit works so good. I tried it on the problem that comes up on googling `hardest sudoku\r\nproblem ever`. It solved it within miniseconds and without a hiccup.\r\n\r\nCredit: Picosat has been used for solving SAT equations in this program.\r\n<h1> Test to see if pure html works </h1>\r\n\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
