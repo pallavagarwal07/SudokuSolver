@@ -135,7 +135,7 @@ block = gen_block_least() + gen_block_most()
 cell = gen_cell_least() + gen_cell_most()
 
 rules = facts + row + col + block + cell
-
+print(len(rules))
 list = (pycosat.solve(rules))
 
 matrix = []
